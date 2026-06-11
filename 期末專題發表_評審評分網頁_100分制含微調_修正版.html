@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>期末專題發表評分系統｜有／無行動方案</title>
+  <style>
+    :root{--bg:#f5f7fb;--card:#fff;--text:#18202f;--muted:#667085;--line:#d0d5dd;--dark:#101828;--blue:#2563eb;--soft:#eff6ff;--green:#ecfdf3;--orange:#fff7ed;--red:#fef3f2;--purple:#f4f3ff;--purpleText:#5925dc;}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;line-height:1.55}
+    header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+    .wrap{max-width:1200px;margin:auto;padding:18px}.head{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}.title h1{margin:0;font-size:26px}.sub{color:var(--muted);font-size:14px;margin-top:4px}
+    .topScore{text-align:right;min-width:260px}.topScore .label{color:var(--muted);font-size:13px}.topScore .num{font-size:42px;font-weight:900;color:var(--blue);line-height:1}.topScore small{font-size:18px;color:var(--muted)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 12px 28px rgba(16,24,40,.06)}
+    .landing{padding:34px;margin-top:24px}.landing h2{font-size:30px;margin:0 0 8px}.landing p{margin:0;color:var(--muted)}.choiceGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:22px}.choice{padding:24px;border:2px solid var(--line);border-radius:18px;background:#fff;cursor:pointer;text-align:left;transition:.15s}.choice:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(16,24,40,.10);border-color:var(--blue)}.choiceTag{display:inline-block;border-radius:999px;padding:5px 10px;font-size:13px;font-weight:900;margin-bottom:12px}.tagA{background:var(--purple);color:var(--purpleText)}.tagB{background:var(--soft);color:#1d4ed8}.choice h3{font-size:24px;margin:0 0 8px}.choice ul{margin:12px 0 0 20px;color:#344054;padding:0}.choice li{margin:4px 0}.hidden{display:none!important}
+    .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0;padding:18px} label.caption{display:block;color:var(--muted);font-size:13px;margin-bottom:6px} input,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 12px;font:inherit;background:#fff} textarea{min-height:90px;resize:vertical}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}button{border:0;border-radius:999px;padding:10px 16px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--dark);color:#fff}.ghost{background:#fff;border:1px solid var(--line);color:var(--dark)}.blueBtn{background:var(--blue);color:#fff}.navNote{font-size:14px;color:var(--muted);margin-bottom:12px}
+    .criterion{overflow:hidden;margin-bottom:18px}.criterionHead{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:#f9fafb;border-bottom:1px solid var(--line);padding:15px 18px}.criterion h2{margin:0;font-size:20px}.pill{display:inline-block;margin-left:8px;background:var(--soft);color:#1d4ed8;border-radius:999px;padding:4px 10px;font-size:13px;font-weight:900}.now{text-align:right;color:var(--muted)}.now b{color:var(--dark);font-size:18px}
+    .levels{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px}.level{position:relative;display:block;min-height:225px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:14px 14px 50px;cursor:pointer;transition:.12s}.level:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(16,24,40,.08)}.level input{position:absolute;opacity:0;pointer-events:none}.level.selected{border-color:var(--blue);box-shadow:0 0 0 4px #dbeafe}.level[data-score="4"].selected{background:var(--green);border-color:#12b76a}.level[data-score="3"].selected{background:var(--soft);border-color:#2563eb}.level[data-score="2"].selected{background:var(--orange);border-color:#f79009}.level[data-score="1"].selected{background:var(--red);border-color:#f04438}.levelTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.name{font-size:18px;font-weight:900}.point{background:var(--dark);color:#fff;border-radius:999px;padding:4px 10px;font-size:13px;font-weight:900}.desc{font-size:14px;color:#344054;white-space:pre-line}.mark{position:absolute;left:14px;right:14px;bottom:12px;text-align:center;border:1px dashed var(--line);border-radius:12px;padding:7px;color:var(--muted);font-weight:800;font-size:13px;background:rgba(255,255,255,.75)}.selected .mark{border-style:solid;color:var(--blue);background:#fff}
+    .result{padding:18px;margin-top:18px}.result h2{margin-top:0}.resultGrid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}table{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:14px}th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#f9fafb}tr:last-child td{border-bottom:0}.final{border:1px solid var(--line);border-radius:16px;background:#f9fafb;padding:18px}.big{font-size:58px;font-weight:900;color:var(--blue);line-height:1}.unit{font-size:18px;color:var(--muted);font-weight:800}.formula,.note{color:var(--muted);font-size:14px;margin-top:8px}.adjustBox{margin-top:16px;background:#fff;border:2px solid var(--blue);border-radius:16px;padding:14px}.adjustRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}.adjustBox input{font-size:20px;font-weight:900}.miniScore{font-size:14px;color:var(--muted);margin-top:8px}.miniScore b{color:var(--dark)}
+    @media(max-width:1000px){.levels,.choiceGrid{grid-template-columns:repeat(2,1fr)}.meta{grid-template-columns:repeat(2,1fr)}.resultGrid{grid-template-columns:1fr}.head{grid-template-columns:1fr}.topScore{text-align:left}}
+    @media(max-width:640px){.levels,.meta,.choiceGrid{grid-template-columns:1fr}.criterionHead{grid-template-columns:1fr}.now{text-align:left}.adjustRow{grid-template-columns:1fr}}
+    @media print{
+      @page{size:A4;margin:10mm}
+      body{background:#fff;color:#000;font-size:11pt;line-height:1.35}
+      header{position:static;background:#fff;border-bottom:1px solid #aaa;box-shadow:none}
+      .wrap{max-width:none;width:100%;padding:8px 0}
+      .landing,.buttons,.navNote{display:none!important}
+      .hidden{display:none!important}
+      #scoreApp:not(.hidden){display:block!important}
+      .card{box-shadow:none;border:1px solid #999;margin:8px 0;padding:10px;break-inside:avoid;page-break-inside:avoid}
+      .meta{grid-template-columns:repeat(4,1fr);gap:8px}
+      input,textarea{border:1px solid #999;background:#fff;color:#000;padding:6px}
+      textarea{min-height:70px}
+      .criterion{break-inside:avoid;page-break-inside:avoid}
+      .criterionHead{grid-template-columns:1fr auto;gap:8px}
+      .levels{grid-template-columns:repeat(4,1fr);gap:6px}
+      .level{min-height:auto;padding:8px;border-color:#777;background:#fff!important}
+      .level.selected{outline:3px solid #000;border-color:#000;background:#f2f2f2!important}
+      .level input{display:inline-block;width:auto;margin-right:4px}
+      .mark{display:none!important}
+      .resultGrid{grid-template-columns:1.2fr .8fr;gap:10px}
+      .final{box-shadow:none;border:1px solid #999}
+      .topScore .num{font-size:28px}
+      button{display:none!important}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap head">
+    <div class="title">
+      <h1 id="pageTitle">期末專題發表評分系統</h1>
+      <div class="sub" id="pageSub">請先選擇評分版本。評審勾選 4–1 分後，系統自動換算為 100 分制。</div>
+    </div>
+    <div class="topScore" id="scoreHeader">
+      <div class="label">最後總分（含微調，百分制）</div>
+      <div class="num"><span id="finalTop">0.0</span><small> / 100</small></div>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <section id="landing" class="card landing">
+    <h2>請選擇評分表版本</h2>
+    <p>兩個版本皆保留原本設計：4–1 分勾選、自動加權為 100 分制、手動微幅調整、列印與複製摘要。</p>
+    <div class="choiceGrid">
+      <button class="choice" onclick="selectVersion('action')">
+        <span class="choiceTag tagA">行動方案版</span>
+        <h3>進入有行動方案評分</h3>
+        <ul>
+          <li>前言 5%</li>
+          <li>內容 55%（正文＋結論／行動方案）</li>
+          <li>資料彙整 10%、簡報力 20%、團隊合作 10%</li>
+        </ul>
+      </button>
+      <button class="choice" onclick="selectVersion('noAction')">
+        <span class="choiceTag tagB">無行動方案版</span>
+        <h3>進入無行動方案評分</h3>
+        <ul>
+          <li>前言 10%</li>
+          <li>內容 50%（正文＋結論）</li>
+          <li>資料彙整 10%、簡報力 20%、團隊合作 10%</li>
+        </ul>
+      </button>
+    </div>
+  </section>
+
+  <section id="scoreApp" class="hidden">
+    <section class="card meta">
+      <div><label class="caption" for="group">報告組別</label><input id="group" placeholder="例如：第 1 組"></div>
+      <div><label class="caption" for="judge">評審姓名</label><input id="judge" placeholder="例如：羅俊宏老師"></div>
+      <div><label class="caption" for="topic">專題名稱</label><input id="topic" placeholder="輸入專題名稱"></div>
+      <div><label class="caption" for="date">評分日期</label><input id="date" type="date"></div>
+    </section>
+    <div class="navNote" id="versionNote"></div>
+    <div class="buttons">
+      <button class="blueBtn" onclick="backToLanding()">回到版本選擇</button>
+      <button type="button" class="primary" id="printBtn">開啟列印視窗／另存 PDF</button>
+      <button class="ghost" onclick="resetScores()">清除分數</button>
+      <button class="ghost" onclick="copySummary()">複製評分摘要</button>
+    </div>
+    <section id="criteria"></section>
+    <section class="card result">
+      <h2>評分結果</h2>
+      <div class="resultGrid">
+        <table>
+          <thead><tr><th>評分項目</th><th>勾選分數</th><th>比例</th><th>換算後分數<br>（百分制）</th></tr></thead>
+          <tbody id="summaryBody"></tbody>
+          <tfoot>
+            <tr><th colspan="3">自動加權小計</th><th><span id="baseInTable">0.0</span> / 100</th></tr>
+            <tr><th colspan="3">手動微幅調整</th><th><span id="adjustInTable">0.0</span> 分</th></tr>
+            <tr><th colspan="3">最後總分</th><th><span id="finalInTable">0.0</span> / 100</th></tr>
+          </tfoot>
+        </table>
+        <div class="final">
+          <div>最後總分（百分制）</div>
+          <div class="big"><span id="finalBig">0.0</span><span class="unit"> / 100</span></div>
+          <div class="formula">計算方式：勾選分數 ÷ 4 × 該項比例。所有項目加總後，再加入手動微調。</div>
+          <div class="note" id="exampleNote">例：內容占 50%，若勾選 3 分，換算為 3 ÷ 4 × 50 = 37.5 分。</div>
+          <div class="adjustBox">
+            <div class="adjustRow">
+              <div>
+                <label class="caption" for="manualAdjust">手動微幅調整（可輸入正分或負分）</label>
+                <input id="manualAdjust" type="number" step="0.1" value="0" placeholder="例如：1、-0.5">
+              </div>
+              <div class="miniScore">
+                自動加權小計：<b><span id="baseScore">0.0</span> / 100</b><br>
+                微調分數：<b><span id="adjustScore">0.0</span> 分</b>
+              </div>
+            </div>
+          </div>
+          <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+          <label class="caption" for="comments">評審補充意見</label>
+          <textarea id="comments" placeholder="可輸入具體建議、優點或提醒事項。"></textarea>
+        </div>
+      </div>
+    </section>
+  </section>
+</main>
+<script>
+const rubrics={
+  noAction:{
+    label:'無行動方案版',
+    subtitle:'左營高中 114 學年度第二學期校訂必修「閱讀與專題」｜無行動方案版｜評審勾選 4–1 分，系統自動換算為 100 分制',
+    note:'目前使用：無行動方案版（前言 10%、內容 50%、資料彙整 10%、簡報力 20%、團隊合作 10%）',
+    example:'例：內容占 50%，若勾選 3 分，換算為 3 ÷ 4 × 50 = 37.5 分。',
+    items:[
+      {id:'intro',title:'前言（研究動機、目的）',weight:10,levels:{4:'前言（研究動機）能清楚且具體地說明專題的主題設定，並明白指出專題研究之目的。',3:'前言（研究動機）能說明專題的主題設定，並能指出專題研究之目的。',2:'前言（研究動機）能部分說明專題的主題設定，並能指出專題研究之方向。',1:'前言（研究動機）與專題主題設定的關聯性低，專題研究之方向不清楚。'}},
+      {id:'content',title:'內容（架構邏輯）正文＋結論',weight:50,levels:{4:'各子標題與內容能完全呼應，能以自行歸納、整理之資料、自製圖表、數據、實例等充分支持專題論述。\n論述充實完整、兼具深度與廣度，論述層次分明，且具體易懂。\n結論能完全呼應研究動機，且能根據專題整體脈絡清楚提出自己的觀點、發現或解決方法。',3:'各子標題與內容有呼應，能引用資料、圖表、數據、實例等支持專題論述。\n論述清楚、有層次，具體易懂。\n結論能部分呼應研究動機，有歸納出觀點、發現或解決方法。',2:'有標明子標題，部分內容與子標題命名相關。\n能引用部分資料，與專題論述稍有關聯。\n結論尚可呼應研究動機，有歸納出部分觀點、發現或解決方法。',1:'未明確標明子標題或子標題不明確，引用資料與專題論述無關，看不出內容相關性。\n結論未呼應研究動機，或未能歸納出觀點、發現或解決方法。'}},
+      {id:'sources',title:'資料彙整',weight:10,levels:{4:'資料來源具公信力（學術性論文、正式期刊、政府資料、網路媒體等）。\n有完整且正確標示引用資料之主題、作者與其他訊息。',3:'部分資料來源具公信力（學術性論文、正式期刊、政府資料、網路媒體等）。\n有標示引用資料之主題、作者與其他訊息。',2:'資料來源稍欠缺公信力，有主題與其他資訊。',1:'資料來源標示不清，未清楚標示所引用資料之主題與其他資訊。'}},
+      {id:'presentation',title:'簡報力：簡報設計／口語表達',weight:20,levels:{4:'充分發表簡報主題。\n版面清楚、易懂，圖片與文字能完全相互呼應。\n口語表達流暢，台風穩健，言之有物。',3:'簡報有助主題發表。\n簡報版面清楚，圖片與文字能相互呼應。\n口語表達中規中矩。',2:'簡報能搭配主題發表。\n版面文字與圖片部分能配合。\n口語表達尚可。',1:'簡報簡單。\n附有文字與圖片。\n照本宣科，口語表達一般。'}},
+      {id:'teamwork',title:'團隊合作',weight:10,levels:{4:'小組報告相當流暢，團隊默契佳，充分表現分工合作。',3:'小組報告流暢，各司其職。',2:'小組報告平順，依序完成。',1:'完成小組報告，但未能顯示團隊合作。'}}
+    ]
+  },
+  action:{
+    label:'行動方案版',
+    subtitle:'左營高中 114 學年度第二學期校訂必修「閱讀與專題」｜行動方案版｜評審勾選 4–1 分，系統自動換算為 100 分制',
+    note:'目前使用：行動方案版（前言 5%、內容 55%〔正文＋結論／行動方案〕、資料彙整 10%、簡報力 20%、團隊合作 10%）',
+    example:'例：內容占 55%，若勾選 3 分，換算為 3 ÷ 4 × 55 = 41.3 分。',
+    items:[
+      {id:'intro',title:'前言（研究動機、目的）',weight:5,levels:{4:'前言（研究動機）能清楚且具體地說明專題的主題設定，並明白指出專題研究之目的。',3:'前言（研究動機）能說明專題的主題設定，並能指出專題研究之目的。',2:'前言（研究動機）能部分說明專題的主題設定，並能指出專題研究之方向。',1:'前言（研究動機）與專題主題設定的關聯性低，專題研究之方向不清楚。'}},
+      {id:'content',title:'內容（架構邏輯）正文＋結論／行動方案',weight:55,levels:{4:'各子標題與內容能完全呼應，能以自行歸納、整理之資料、自製圖表、數據、實例等充分支持專題論述。\n論述充實完整、兼具深度與廣度，論述層次分明，且具體易懂。\n結論／行動方案能完全呼應研究動機，且能根據專題整體脈絡清楚提出自己的觀點、發現或解決方法。',3:'各子標題與內容有呼應，能引用資料、圖表、數據、實例等支持專題論述。\n論述清楚、有層次，具體易懂。\n結論／行動方案能部分呼應研究動機，有歸納出觀點、發現或解決方法。',2:'有標明子標題，部分內容與子標題命名相關。\n能引用部分資料，與專題論述稍有關聯。\n結論／行動方案尚可呼應研究動機，有歸納出部分觀點、發現或解決方法。',1:'未明確標明子標題或子標題不明確，引用資料與專題論述無關，看不出內容相關性。\n結論／行動方案未呼應研究動機，或未能歸納出觀點、發現或解決方法。'}},
+      {id:'sources',title:'資料彙整',weight:10,levels:{4:'資料來源具公信力（學術性論文、正式期刊、政府資料、網路媒體等）。\n有完整且正確標示引用資料之主題、作者與其他訊息。',3:'部分資料來源具公信力（學術性論文、正式期刊、政府資料、網路媒體等）。\n有標示引用資料之主題、作者與其他訊息。',2:'資料來源稍欠缺公信力，有主題與其他資訊。',1:'資料來源標示不清，未清楚標示所引用資料之主題與其他資訊。'}},
+      {id:'presentation',title:'簡報力：簡報設計／口語表達',weight:20,levels:{4:'充分發表簡報主題。\n版面清楚、易懂，圖片與文字能完全相互呼應。\n口語表達流暢，台風穩健，言之有物。',3:'簡報有助主題發表。\n簡報版面清楚，圖片與文字能相互呼應。\n口語表達中規中矩。',2:'簡報能搭配主題發表。\n版面文字與圖片部分能配合。\n口語表達尚可。',1:'簡報簡單。\n附有文字與圖片。\n照本宣科，口語表達一般。'}},
+      {id:'teamwork',title:'團隊合作',weight:10,levels:{4:'小組報告相當流暢，團隊默契佳，充分表現分工合作。',3:'小組報告流暢，各司其職。',2:'小組報告平順，依序完成。',1:'完成小組報告，但未能顯示團隊合作。'}}
+    ]
+  }
+};
+const names={4:'優良',3:'不錯',2:'尚可',1:'有待改進'};
+let currentKey=null;
+let rubric=[];
+function val(id){return document.getElementById(id)}
+function selectVersion(key){
+  currentKey=key; rubric=rubrics[key].items;
+  val('landing').classList.add('hidden'); val('scoreApp').classList.remove('hidden');
+  val('pageTitle').textContent='期末專題發表評分表｜'+rubrics[key].label;
+  val('pageSub').textContent=rubrics[key].subtitle;
+  val('versionNote').textContent=rubrics[key].note;
+  val('exampleNote').textContent=rubrics[key].example;
+  resetAllFieldsForNewVersion(); render(); calculate(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function backToLanding(){val('scoreApp').classList.add('hidden');val('landing').classList.remove('hidden');val('pageTitle').textContent='期末專題發表評分系統';val('pageSub').textContent='請先選擇評分版本。評審勾選 4–1 分後，系統自動換算為 100 分制。';currentKey=null;rubric=[];['finalTop'].forEach(id=>val(id).textContent='0.0');window.scrollTo({top:0,behavior:'smooth'});}
+function resetAllFieldsForNewVersion(){['group','judge','topic','comments'].forEach(id=>{if(val(id)) val(id).value=''}); val('manualAdjust').value=0; val('date').value=new Date().toISOString().slice(0,10);}
+function render(){
+  val('criteria').innerHTML=rubric.map(item=>`<article class="card criterion"><div class="criterionHead"><div><h2>${item.title}<span class="pill">${item.weight}%</span></h2></div><div class="now">目前：<span id="${item.id}Raw">未評分</span><br><b id="${item.id}Weighted"></b></div></div><div class="levels">${[4,3,2,1].map(s=>`<label class="level" data-criterion="${item.id}" data-score="${s}"><input type="radio" name="${item.id}" value="${s}"><div class="levelTop"><div class="name">${names[s]}</div><div class="point">${s} 分</div></div><div class="desc">${item.levels[s]}</div><div class="mark">點選此等第</div></label>`).join('')}</div></article>`).join('');
+  document.querySelectorAll('.level').forEach(el=>el.addEventListener('click',()=>{el.querySelector('input').checked=true;document.querySelectorAll(`.level[data-criterion="${el.dataset.criterion}"]`).forEach(x=>x.classList.remove('selected'));el.classList.add('selected');calculate();}));
+}
+function calculate(){
+  let base=0;
+  val('summaryBody').innerHTML=rubric.map(item=>{const selected=document.querySelector(`input[name="${item.id}"]:checked`);const raw=selected?Number(selected.value):0;const weighted=raw/4*item.weight;base+=weighted;if(val(item.id+'Raw')){val(item.id+'Raw').textContent=selected?`${names[raw]} ${raw} 分`:'未評分';val(item.id+'Weighted').textContent=selected?`換算 ${weighted.toFixed(1)} / ${item.weight}`:'';}return `<tr><td>${item.title}</td><td>${selected?`${names[raw]}（${raw} 分）`:'未評分'}</td><td>${item.weight}%</td><td>${weighted.toFixed(1)}</td></tr>`;}).join('');
+  const adjust=Number(val('manualAdjust').value||0); const final=Math.min(100,Math.max(0,base+adjust));
+  ['baseScore','baseInTable'].forEach(id=>val(id).textContent=base.toFixed(1)); ['adjustScore','adjustInTable'].forEach(id=>val(id).textContent=adjust.toFixed(1)); ['finalTop','finalBig','finalInTable'].forEach(id=>val(id).textContent=final.toFixed(1));
+}
+function resetScores(){document.querySelectorAll('input[type=radio]').forEach(i=>i.checked=false);document.querySelectorAll('.level').forEach(x=>x.classList.remove('selected'));val('manualAdjust').value=0;calculate();}
+function escapeHtml(str){
+  return String(str ?? '').replace(/[&<>\"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[ch]));
+}
+function buildPrintableHtml(){
+  calculate();
+  const version = currentKey ? rubrics[currentKey].label : '';
+  const metaRows = [
+    ['評分版本', version],
+    ['報告組別', val('group').value || '未填'],
+    ['專題名稱', val('topic').value || '未填'],
+    ['評審姓名', val('judge').value || '未填'],
+    ['評分日期', val('date').value || '未填']
+  ];
+  const scoreRows = rubric.map(item=>{
+    const selected=document.querySelector(`input[name="${item.id}"]:checked`);
+    const raw=selected?Number(selected.value):0;
+    const weighted=raw/4*item.weight;
+    return `<tr><td>${escapeHtml(item.title)}</td><td>${selected?escapeHtml(names[raw]+' '+raw+' 分'):'未評分'}</td><td>${item.weight}%</td><td>${weighted.toFixed(1)}</td></tr>`;
+  }).join('');
+  const detailRows = rubric.map(item=>{
+    const selected=document.querySelector(`input[name="${item.id}"]:checked`);
+    const raw=selected?Number(selected.value):0;
+    const desc = selected ? item.levels[raw] : '未評分';
+    return `<section class="criterion"><h3>${escapeHtml(item.title)}｜${item.weight}%｜${selected?escapeHtml(names[raw]+' '+raw+' 分'):'未評分'}</h3><p>${escapeHtml(desc).replace(/\n/g,'<br>')}</p></section>`;
+  }).join('');
+  const comments = val('comments').value || '無';
+  const printedAt = new Date().toLocaleString('zh-TW', {hour12:false});
+  return `<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><title>${escapeHtml(version)}｜列印評分表</title>
+  <style>
+    *{box-sizing:border-box} body{font-family:"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;color:#111827;margin:22px;line-height:1.45} 
+    h1{font-size:22px;margin:0 0 6px} .sub{font-size:12px;color:#475467;margin-bottom:14px}.meta{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;border:1px solid #d0d5dd;padding:10px;margin-bottom:14px}.meta div{font-size:13px}.label{font-weight:700;color:#344054;margin-right:8px}
+    table{width:100%;border-collapse:collapse;margin:12px 0 14px;font-size:12.5px} th,td{border:1px solid #98a2b3;padding:7px;vertical-align:top;text-align:left} th{background:#f2f4f7}.totalBox{border:2px solid #111827;padding:10px;margin:12px 0 16px;font-size:15px}.totalBox b{font-size:22px}.criterion{break-inside:avoid;border:1px solid #d0d5dd;margin:8px 0;padding:9px}.criterion h3{font-size:14px;margin:0 0 5px}.criterion p{font-size:12px;margin:0}.comments{white-space:pre-wrap;border:1px solid #d0d5dd;min-height:50px;padding:8px;font-size:12.5px}.footer{font-size:11px;color:#667085;margin-top:12px}
+    @page{size:A4;margin:12mm}
+    @media print{body{margin:0}.noPrint{display:none!important}}
+  </style></head><body>
+    <h1>左營高中 114 學年度第二學期校訂必修「閱讀與專題」期末發表評分表</h1>
+    <div class="sub">${escapeHtml(version)}｜評審勾選 4–1 分後，系統換算為 100 分制；本頁為列印／PDF 輸出版。</div>
+    <div class="meta">${metaRows.map(([k,v])=>`<div><span class="label">${escapeHtml(k)}：</span>${escapeHtml(v)}</div>`).join('')}</div>
+    <table><thead><tr><th>評分項目</th><th>勾選分數</th><th>比例</th><th>換算後分數（百分制）</th></tr></thead><tbody>${scoreRows}</tbody></table>
+    <div class="totalBox">自動加權小計：${escapeHtml(val('baseScore').textContent)} / 100<br>手動微幅調整：${escapeHtml(val('adjustScore').textContent)} 分<br><b>最後總分：${escapeHtml(val('finalBig').textContent)} / 100</b></div>
+    <h2 style="font-size:16px;margin:12px 0 6px">各項評分依據</h2>${detailRows}
+    <h2 style="font-size:16px;margin:12px 0 6px">評審補充意見</h2><div class="comments">${escapeHtml(comments)}</div>
+    <div class="footer">列印時間：${escapeHtml(printedAt)}。若要存成 PDF，請在接下來的列印視窗中，於「目的地／印表機」選擇「另存為 PDF」或「Microsoft Print to PDF」。</div>
+  </body></html>`;
+}
+function printScoreSheet(){
+  if(!currentKey){
+    alert('請先選擇「行動方案版」或「無行動方案版」後再列印。');
+    return;
+  }
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=1000,height=800');
+  if(!printWindow){
+    alert('瀏覽器封鎖了列印視窗。請允許彈出視窗，或使用 Ctrl+P（Mac：Command+P）後選擇「另存為 PDF」。');
+    return;
+  }
+  printWindow.document.open();
+  printWindow.document.write(buildPrintableHtml());
+  printWindow.document.close();
+  printWindow.onload = () => {
+    printWindow.focus();
+    printWindow.print();
+  };
+  setTimeout(()=>{
+    try{ printWindow.focus(); printWindow.print(); }catch(e){}
+  },500);
+}
+
+async function copySummary(){
+  const version=currentKey?rubrics[currentKey].label:'未選擇版本';
+  const lines=[`評分版本：${version}`,`報告組別：${val('group').value||'未填'}`,`專題名稱：${val('topic').value||'未填'}`,`評審姓名：${val('judge').value||'未填'}`,`評分日期：${val('date').value||'未填'}`,'',...rubric.map(item=>{const selected=document.querySelector(`input[name="${item.id}"]:checked`);const raw=selected?Number(selected.value):0;return `${item.title}：${selected?`${names[raw]} ${raw}分`:'未評分'}｜比例 ${item.weight}%｜換算後 ${(raw/4*item.weight).toFixed(1)}分`; }),'',`自動加權小計：${val('baseScore').textContent} / 100`,`手動微幅調整：${val('adjustScore').textContent} 分`,`最後總分：${val('finalBig').textContent} / 100`,'',`補充意見：${val('comments').value||'無'}`];
+  try{await navigator.clipboard.writeText(lines.join('\n'));alert('已複製評分摘要。')}catch(e){alert(lines.join('\n'))}
+}
+val('manualAdjust').addEventListener('input',calculate); val('date').value=new Date().toISOString().slice(0,10); val('printBtn').addEventListener('click', printScoreSheet);
+</script>
+</body>
+</html>
